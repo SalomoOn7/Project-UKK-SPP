@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PetugasController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -37,4 +38,11 @@ Route::middleware('auth')->group(function () {
 
 // Logout
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+//CRUD Petugas 
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::resource('petugas', PetugasController::class);
+    Route::resource('siswa', SiswaController::class);
+});
 

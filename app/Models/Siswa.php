@@ -10,9 +10,11 @@ class Siswa extends Authenticatable
     use Notifiable;
 
     protected $table = 'siswa';
-
+    protected $primaryKey = 'nisn';
+    public $incrementing = true; 
+    protected $keyType = 'int';
+    public $timestamps = false;
     protected $fillable = [
-        'nisn',
         'nis',
         'nama',
         'username',

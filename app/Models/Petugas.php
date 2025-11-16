@@ -10,7 +10,10 @@ class Petugas extends Authenticatable
     use Notifiable;
 
     protected $table = 'petugas';
-
+    protected $primaryKey = 'id_petugas';
+    public $incrementing = true; 
+    protected $keyType = 'int';
+    public $timestamps = false;
     protected $fillable = [
         'username',
         'password',

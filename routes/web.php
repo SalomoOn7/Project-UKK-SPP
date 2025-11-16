@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SppController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -52,4 +53,10 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     Route::resource('kelas', KelasController::class)->parameters([
         'kelas' => 'id_kelas'
     ]);
+});
+
+//CRUD Spp
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::resource('spp', SppController::class);
 });

@@ -58,6 +58,13 @@
                         label="Manajemen Kelas"
                     />
 
+                    <x-admin-menu-item
+                        route="admin.spp.index"
+                        active="admin/spp*"
+                        icon="id-badge"
+                        label="Manajemen SPP"
+                    />
+
                 @endif
 
                 {{-- ==== PETUGAS ==== --}}

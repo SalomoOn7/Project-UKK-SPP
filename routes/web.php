@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetugasController;
+use App\Http\Controllers\KelasController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,6 +44,12 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
     Route::resource('petugas', PetugasController::class);
-    Route::resource('siswa', SiswaController::class);
 });
 
+// CRUD Kelas
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::resource('kelas', KelasController::class)->parameters([
+        'kelas' => 'id_kelas'
+    ]);
+});

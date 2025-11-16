@@ -51,6 +51,13 @@
                         label="Manajemen Petugas"
                     />
 
+                    <x-admin-menu-item
+                        route="admin.kelas.index"
+                        active="admin/kelas*"
+                        icon="id-badge"
+                        label="Manajemen Kelas"
+                    />
+
                 @endif
 
                 {{-- ==== PETUGAS ==== --}}

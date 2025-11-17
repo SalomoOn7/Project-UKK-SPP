@@ -80,6 +80,7 @@
             <div class="mt-4">
                 <x-input-label value="Level" />
                 <select name="level" class="mt-1 block w-full border-gray-300 rounded-lg">
+                     <option value="admin">Admin</option>
                     <option value="petugas">Petugas</option>
                 </select>
             </div>
@@ -121,6 +122,7 @@
                 <div class="mt-4">
                     <x-input-label value="Level" />
                     <select name="level" class="mt-1 block w-full border-gray-300 rounded-lg">
+                        <option value="admin" @selected($p->level == 'admin')>Admin</option>
                         <option value="petugas" @selected($p->level == 'petugas')>Petugas</option>
                     </select>
                 </div>

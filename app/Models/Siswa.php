@@ -11,10 +11,11 @@ class Siswa extends Authenticatable
 
     protected $table = 'siswa';
     protected $primaryKey = 'nisn';
-    public $incrementing = true; 
-    protected $keyType = 'int';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
     protected $fillable = [
+        'nisn',
         'nis',
         'nama',
         'username',
@@ -29,4 +30,10 @@ class Siswa extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function kelas(){
+        return $this->belongsTo(Kelas::class, 'id_kelas','id_kelas');
+    }
+    public function spp(){
+        return $this->belongsTo(Spp::class, 'id_spp','id_spp');
+    }
 }

@@ -65,6 +65,13 @@
                         label="Manajemen SPP"
                     />
 
+                    <x-admin-menu-item
+                        route="admin.siswa.index"
+                        active="admin/siswa*"
+                        icon="id-badge"
+                        label="Manajemen Siswa"
+                    />
+
                 @endif
 
                 {{-- ==== PETUGAS ==== --}}

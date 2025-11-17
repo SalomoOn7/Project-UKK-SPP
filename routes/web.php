@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SppController;
+use App\Http\Controllers\SiswaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -59,4 +60,12 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
     Route::resource('spp', SppController::class);
+});
+
+//CRUD Siswa
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::resource('siswa', SiswaController::class)->parameters([
+        'siswa' => 'nisn'
+    ]);
 });

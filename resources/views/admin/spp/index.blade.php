@@ -20,7 +20,7 @@
                 <tr class="bg-gray-100 border-b">
                     <th class="px-4 py-2 text-left">Tahun</th>
                     <th class="px-4 py-2 text-left">Nominal</th>
-                    <th class="px-4 py-2 text-left">Aksi</th>
+                    <th class="px-4 py-2 text-center">Aksi</th>
                 </tr>
             </thead>
 
@@ -28,9 +28,10 @@
                 @foreach ($spp as $s)
                     <tr class="border-b">
                         <td class="px-4 py-2">{{ $s->tahun }}</td>
-                        <td class="px-4 py-2">Rp {{ number_format($s->nominal, 0, ',', '.') }}</td>
+                        <td class="px-4 py-2 ">Rp {{ number_format($s->nominal, 0, ',', '.') }}</td>
 
-                        <td class="px-4 py-2 flex gap-2">
+                        <td class="px-4 py-2 gap-2 text-center">
+                            <div class="flex justify-center gap-2">
                             <x-secondary-button
                                 x-on:click="$dispatch('open-modal', 'edit-spp-{{ $s->id_spp }}')">
                                 Edit
@@ -45,6 +46,7 @@
 
                                 <x-danger-button>Hapus</x-danger-button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

@@ -19,7 +19,7 @@
                 <tr class="bg-gray-100 border-b">
                     <th class="px-4 py-2 text-left">Nama Kelas</th>
                     <th class="px-4 py-2 text-left">Kompetensi Keahlian</th>
-                    <th class="px-4 py-2 text-left">Aksi</th>
+                    <th class="px-4 py-2 text-center">Aksi</th>
                 </tr>
             </thead>
 
@@ -29,7 +29,8 @@
                         <td class="px-4 py-2">{{ $k->nama_kelas }}</td>
                         <td class="px-4 py-2">{{ $k->kompetensi_keahlian }}</td>
 
-                        <td class="px-4 py-2 flex gap-2">
+                        <td class="px-4 py-2 gap-2 text-center">
+                            <div class="flex justify-center gap-2">
                             <x-secondary-button
                                 x-on:click="$dispatch('open-modal', 'edit-kelas-{{ $k->id_kelas }}')">
                                 Edit
@@ -43,6 +44,7 @@
 
                                 <x-danger-button>Hapus</x-danger-button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

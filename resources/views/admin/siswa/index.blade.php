@@ -22,7 +22,7 @@
                         <th class="p-2">Kelas</th>
                         <th class="p-2">SPP</th>
                         <th class="p-2">No Telp</th>
-                        <th class="p-2">Aksi</th>
+                        <th class="p-2 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,9 @@
                         <td class="p-2">{{ $s->kelas->nama_kelas ?? '-' }}</td>
                         <td class="p-2">Rp {{ number_format($s->spp->nominal ?? 0, 0, ',', '.') }}</td>
                         <td class="p-2">{{ $s->no_telp }}</td>
-                        <td class="p-2 flex gap-2">
+                        
+                        <td class="px-4 py-2 gap-2 text-center">
+                            <div class="flex justify-center gap-2">
                             {{-- Edit Button --}}
                             <x-secondary-button
                                 x-data=""
@@ -50,6 +52,7 @@
                                 @method('DELETE')
                                 <x-danger-button>Hapus</x-danger-button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach

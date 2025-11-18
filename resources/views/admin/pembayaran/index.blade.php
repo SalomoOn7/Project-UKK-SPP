@@ -6,18 +6,18 @@
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b">
-                        <th class="p-2">NISN</th>
-                        <th class="p-2">Nama</th>
-                        <th class="p-2">Status Pembayaran</th>
-                        <th class="p-2">Aksi</th>
+                        <th class="p-2 text-left">NISN</th>
+                        <th class="p-2 text-left">Nama</th>
+                        <th class="p-2 text-left">Status Pembayaran</th>
+                        <th class="p-2 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($data as $d)
                         <tr class="border-b">
-                            <td class="p-2">{{ $d['nisn'] }}</td>
-                            <td class="p-2">{{ $d['nama'] }}</td>
-                            <td class="p-2">
+                            <td class="p-2 text-left">{{ $d['nisn'] }}</td>
+                            <td class="p-2 text-left">{{ $d['nama'] }}</td>
+                            <td class="p-2 text-left">
                                 @php
                                     $belum = array_values(array_filter($d['status'], fn($v)=>$v=='belum'));
                                 @endphp
@@ -26,12 +26,14 @@
                                     {{ count($belum) }} Bulan Belum Lunas
                                 </span>
                             </td>
-                            <td class="p-2">
+                            <td class=" px-4 py-2 text-center gap-2">
+                                <div class="flex justify-center gap-2">
                                 <form action="{{ route('admin.pembayaran.bayar', $d['nisn']) }}" method="GET">
                                     <x-primary-button type="submit">
                                         Bayar
                                     </x-primary-button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

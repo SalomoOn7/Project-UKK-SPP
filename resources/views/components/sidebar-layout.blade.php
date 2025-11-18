@@ -72,6 +72,13 @@
                         label="Manajemen Siswa"
                     />
 
+                    <x-admin-menu-item
+                        route="admin.pembayaran.index"
+                        active="admin/pembayaran*"
+                        icon="id-badge"
+                        label="Transaksi Pembayaran"
+                    />
+
                 @endif
 
                 {{-- ==== PETUGAS ==== --}}

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->integer('id_petugas')->unsigned();
             $table->string('nisn', 10);
             $table->date('tgl_bayar');
-            $table->string('bulan_dibayar', 8);
+            $table->string('bulan_dibayar', 225);
             $table->string('tahun_dibayar', 4);
             $table->integer('id_spp')->unsigned();
             $table->integer('jumlah_bayar');

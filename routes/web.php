@@ -7,6 +7,7 @@ use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,4 +69,14 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
     Route::resource('siswa', SiswaController::class)->parameters([
         'siswa' => 'nisn'
     ]);
+});
+
+//Pembayaran
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    Route::get( 'pembayaran',[PembayaranController::class, 'index'])->name('pembayaran.index');
+
+    Route::get('pembayaran/{nisn}',[PembayaranController::class, 'bayar'])->name('pembayaran.bayar');
+
+    Route::post('pembayaran/store',[PembayaranController::class, 'store'])->name('pembayaran.store');
 });

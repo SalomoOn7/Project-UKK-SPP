@@ -80,3 +80,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
 
     Route::post('pembayaran/store',[PembayaranController::class, 'store'])->name('pembayaran.store');
 });
+
+// History  per siswa
+Route::get('admin/pembayaran/history/{nisn}', [PembayaranController::class, 'history'])->name('admin.pembayaran.history');
+Route::get('/detail/{nisn}', [PembayaranController::class, 'detail'])->name('admin.pembayaran.detail');
+Route::get('/cetak/{nisn}',[PembayaranController::class, 'cetakPDF'] )->name('admin.pembayaran.cetak');

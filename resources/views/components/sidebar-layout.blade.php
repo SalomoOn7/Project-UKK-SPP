@@ -76,7 +76,7 @@
                         route="admin.pembayaran.index"
                         active="admin/pembayaran*"
                         icon="id-badge"
-                        label="Transaksi Pembayaran"
+                        label="Transaksi Pembayaran "
                     />
 
                 @endif

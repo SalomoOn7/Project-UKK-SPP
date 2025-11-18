@@ -1,7 +1,6 @@
 <x-sidebar-layout>
     <div class="p-6">
         <h1 class="text-xl font-bold mb-4">Data Pembayaran Siswa</h1>
-
         <div class="bg-white shadow rounded p-4">
             <table class="w-full text-sm">
                 <thead>
@@ -32,6 +31,11 @@
                                     <x-primary-button type="submit">
                                         Bayar
                                     </x-primary-button>
+                                </form>
+                                <form action="{{ route('admin.pembayaran.history', $d['nisn']) }}" method="GET">
+                                <x-primary-button type="submit" class="bg-gray-700 hover:bg-gray-800">
+                                    History
+                                </x-primary-button>
                                 </form>
                                 </div>
                             </td>

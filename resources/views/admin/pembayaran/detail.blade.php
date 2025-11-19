@@ -12,9 +12,9 @@
                 <p><strong>Nama:</strong> {{ $siswa->nama }}</p>
 
                 <p><strong>Kelas:</strong> {{ $siswa->kelas->nama_kelas }}</p>
-                <p><strong>Tahun SPP:</strong> {{ $siswa->tahun }}</p>
+                <p><strong>Tahun SPP:</strong> {{ $spp->tahun }}</p>
 
-                <p><strong>Nominal SPP:</strong> Rp {{ number_format($siswa->nominal, 0, ',', '.') }}</p>
+                <p><strong>Nominal SPP:</strong> Rp {{ number_format($spp->nominal, 0, ',', '.') }}</p>
 
                 <p><strong>Total Bulan Dibayar:</strong> {{ count($bulanDibayar) }} Bulan</p>
 
@@ -62,6 +62,5 @@
                 </x-primary-button>
             </form>
         </div>
-
     </div>
 </x-sidebar-layout>

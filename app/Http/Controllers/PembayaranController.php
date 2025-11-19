@@ -131,6 +131,7 @@ class PembayaranController extends Controller
 
     public function detail($nisn){
         $siswa = Siswa::with('kelas','spp')->findOrFail($nisn);
+        $spp = $siswa->spp;
         $pembayaran = Pembayaran::where('nisn', $nisn)->orderBy('tgl_bayar', 'DESC')->get();
 
         $urutanBulan = [
@@ -154,6 +155,7 @@ class PembayaranController extends Controller
         $belum = array_diff($urutanBulan, $sudah);
         return view('admin.pembayaran.detail', [
         'siswa' => $siswa,
+        'spp' => $spp,
         'pembayaran' => $pembayaran,
         'bulanSudah' => $sudah,
         'bulanBelum' => $belum,
@@ -162,12 +164,35 @@ class PembayaranController extends Controller
         'tunggakan' => $tunggakan,
         ]);
     }
-            public function cetakPDF($id){
-                $p = Pembayaran::with('petugas', 'siswa.kelas', 'siswa','siswa.spp')->findOrFail($id);
+            public function cetakPDF($nisn){
+        $urutanBulan = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+        ];
+        $pembayaran = Pembayaran::where('nisn', $nisn)->orderBy('tgl_bayar', 'DESC')->get();
+        $sudah = [];
+        foreach ($pembayaran as $p) {
+            $arr = json_decode($p->bulan_dibayar, true) ?? [];
+
+            if (!is_array($arr)) {
+                $arr = [];
+            }
+            $sudah = array_merge($sudah, $arr);
+        }
+        $bulanDibayar = $sudah;
+         $tunggakan = array_diff($urutanBulan, $sudah);
+
+
+                $siswa = Siswa::with('kelas','spp')->findOrFail($nisn);
+                $p = Pembayaran::with('petugas', 'siswa.kelas','siswa','siswa.spp')->where('nisn', $nisn)->orderBy('tgl_bayar', 'DESC')->firstOrFail();
                 $hariTanggal =  \Carbon\Carbon::parse($p->tgl_bayar)->translatedFormat('l, d F Y');
-                $pdf = Pdf::loadView('admin.pembayaran.kuitansi', [
+                $pdf = Pdf::loadView('admin.pembayaran.cetak', [
                     'p' => $p,
                     'hariTanggal' => strtoupper($hariTanggal),
+                    'siswa'      => $siswa,
+                    'bulanDibayar' => $bulanDibayar,
+                    'tunggakan' => $tunggakan,
+                    'pembayaran' => $pembayaran,
                 ]);
 
                 return $pdf->download('Kuitansi-Pembayaran-' .$p->nisn.'.pdf');

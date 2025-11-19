@@ -1,4 +1,4 @@
-<h2 style="text-align:center;">PEMBAYARAN SPP</h2>
+<h2 style="text-align:center;">KUITANSI SPP</h2>
 <p>Tanggal: {{ now()->translatedFormat('l, d F Y') }}</p>
 
 <p><strong>NISN:</strong> {{ $siswa->nisn }}</p>

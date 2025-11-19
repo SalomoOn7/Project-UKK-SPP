@@ -8,6 +8,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -85,3 +86,10 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
 Route::get('admin/pembayaran/history/{nisn}', [PembayaranController::class, 'history'])->name('admin.pembayaran.history');
 Route::get('/detail/{nisn}', [PembayaranController::class, 'detail'])->name('admin.pembayaran.detail');
 Route::get('/admin/pembayaran/{nisn}/cetak',[PembayaranController::class, 'cetakPDF'] )->name('admin.pembayaran.cetak');
+
+//Laporan dan FIlter Kelas
+Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
+//Proses Cari Filter
+Route::get('/laporan/cari', [LaporanController::class, 'cari'])->name('admin.laporan.cari');
+//Cetak PDF perkelas
+Route::get('/laporan/cetak/{id_kelas}', [LaporanController::class, 'cetakPDF'])->name('admin.laporan.cetak');

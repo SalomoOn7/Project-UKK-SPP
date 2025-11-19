@@ -149,8 +149,8 @@ class PembayaranController extends Controller
             $sudah = array_merge($sudah, $arr);
         }
         $bulanDibayar = $sudah;
-        $tunggakan = array_diff($urutanBulan, $sudah);
         $totalBayar = $pembayaran->sum('jumlah_bayar');
+        $tunggakan = $spp-> nominal *12 - $totalBayar;
 
         $belum = array_diff($urutanBulan, $sudah);
         return view('admin.pembayaran.detail', [
@@ -195,6 +195,6 @@ class PembayaranController extends Controller
                     'pembayaran' => $pembayaran,
                 ]);
 
-                return $pdf->download('Kuitansi-Pembayaran-' .$p->nisn.'.pdf');
+                return $pdf->stream('Kuitansi-Pembayaran-' .$p->nisn.'.pdf');
         }
 }

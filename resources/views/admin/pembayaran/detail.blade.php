@@ -23,9 +23,7 @@
                 </p>
 
                 <p><strong>Tunggakan:</strong> 
-                   @foreach($bulanDibayar as $b)
-                    <span class="px-2 bg-green-100">{{ $b }}</span>
-                @endforeach
+                    <span class="px-2 bg-red-600 rounded-sm text-white">Rp {{ number_format( $tunggakan, 0, '','.' )}}</span>
                 </p>
             </div>
         </div>

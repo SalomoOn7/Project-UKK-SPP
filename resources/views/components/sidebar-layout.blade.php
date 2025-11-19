@@ -79,6 +79,13 @@
                         label="Transaksi Pembayaran "
                     />
 
+                    <x-admin-menu-item
+                        route="admin.laporan.index"
+                        active="admin/laporan*"
+                        icon="id-badge"
+                        label="Laporan "
+                    />
+
                 @endif
 
                 {{-- ==== PETUGAS ==== --}}

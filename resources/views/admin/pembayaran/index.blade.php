@@ -3,7 +3,7 @@
         <h1 class="text-xl font-bold mb-4">Data Pembayaran Siswa</h1>
 
         <div class="bg-white shadow rounded p-4 overflow-x-auto">
-            <table class="w-full text-xs border">
+            <table class="w-full text-sm border">
                 <thead class="bg-gray-200">
                     <tr class="border-b text-center">
                         <th class="p-2">NISN</th>

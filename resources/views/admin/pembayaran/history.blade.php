@@ -77,14 +77,14 @@
                     @forelse($siswa->pembayaran as $p)
                         <tr class="border-b">
                             <td class="p-2">{{ \Carbon\Carbon::parse($p->tgl_bayar)->format('d-m-Y') }}</td>
+
+                            {{-- 🔥 Solusi A: langsung tampilkan STRING bukan array --}}
                             <td class="p-2">
-                            @foreach(json_decode($p->bulan_dibayar, true) ?? [] as $b)
-                                <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs mr-1">
-                                    {{ $b }}
+                                <span class="inline-block bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                                    {{ $p->bulan_dibayar }}
                                 </span>
-                            @endforeach
-                        </td>
-                        
+                            </td>
+
                             <td class="p-2">
                                 Rp {{ number_format($p->jumlah_bayar, 0, ',', '.') }}
                             </td>

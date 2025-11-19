@@ -12,23 +12,31 @@
                 <p><strong>Nama:</strong> {{ $siswa->nama }}</p>
 
                 <p><strong>Kelas:</strong> {{ $siswa->kelas->nama_kelas }}</p>
-                <p><strong>Tahun SPP:</strong> {{ $spp->tahun }}</p>
+                <p><strong>Tahun SPP:</strong> {{ $siswa->spp->tahun }}</p>
 
-                <p><strong>Nominal SPP:</strong> Rp {{ number_format($spp->nominal, 0, ',', '.') }}</p>
+                <p><strong>Nominal SPP:</strong> 
+                    Rp {{ number_format($siswa->spp->nominal, 0, ',', '.') }}
+                </p>
 
-                <p><strong>Total Bulan Dibayar:</strong> {{ count($bulanDibayar) }} Bulan</p>
+                <p><strong>Total Bulan Dibayar:</strong> 
+                    {{ count($bulanSudah) }} Bulan
+                </p>
 
-                <p><strong>Total Bayar:</strong> 
-                    Rp {{ number_format($totalBayar, 0, ',', '.') }}
+                <p ><strong>Total Bayar:</strong> 
+                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs ml-1">
+                        Rp {{ number_format($totalBayar, 0, ',', '.') }}
+                    </span>
                 </p>
 
                 <p><strong>Tunggakan:</strong> 
-                    <span class="px-2 bg-red-600 rounded-sm text-white">Rp {{ number_format( $tunggakan, 0, '','.' )}}</span>
+                    <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs ml-1">
+                        Rp {{ number_format($tunggakan, 0, ',', '.') }}
+                    </span>
                 </p>
             </div>
         </div>
 
-        {{-- Tabel Bulan Yang Sudah Dibayar --}}
+        {{-- Tabel Pembayaran --}}
         <div class="bg-white rounded shadow p-4">
             <h2 class="font-semibold text-lg mb-3">Riwayat Pembayaran</h2>
 
@@ -38,21 +46,33 @@
                         <th class="p-2 text-left">Bulan</th>
                         <th class="p-2 text-left">Tanggal Bayar</th>
                         <th class="p-2 text-left">Petugas</th>
+                        <th class="p-2 text-left">Jumlah Bayar</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($pembayaran as $p)
                         <tr class="border-b">
+                            {{-- Solusi A → bulan_dibayar adalah string biasa --}}
                             <td class="p-2">{{ $p->bulan_dibayar }}</td>
-                            <td class="p-2">{{ \Carbon\Carbon::parse($p->tgl_bayar)->format('d-m-Y') }}</td>
-                            <td class="p-2">{{ $p->petugas->nama_petugas }}</td>
+
+                            <td class="p-2">
+                                {{ \Carbon\Carbon::parse($p->tgl_bayar)->format('d-m-Y') }}
+                            </td>
+
+                            <td class="p-2">
+                                {{ $p->petugas->nama_petugas ?? '-' }}
+                            </td>
+
+                            <td class="p-2">
+                                Rp {{ number_format($p->jumlah_bayar, 0, ',', '.') }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        {{-- Tombol CETAK PDF --}}
+        {{-- Tombol PDF --}}
         <div class="mt-4">
             <form action="{{ route('admin.pembayaran.cetak', $siswa->nisn) }}" method="GET" target="_blank">
                 <x-primary-button>
@@ -60,5 +80,6 @@
                 </x-primary-button>
             </form>
         </div>
+
     </div>
 </x-sidebar-layout>

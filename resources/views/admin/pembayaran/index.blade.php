@@ -1,47 +1,57 @@
 <x-sidebar-layout>
     <div class="p-6">
         <h1 class="text-xl font-bold mb-4">Data Pembayaran Siswa</h1>
-        <div class="bg-white shadow rounded p-4">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b">
-                        <th class="p-2 text-left">NISN</th>
-                        <th class="p-2 text-left">Nama</th>
-                        <th class="p-2 text-left">Status Pembayaran</th>
-                        <th class="p-2 text-center">Aksi</th>
+
+        <div class="bg-white shadow rounded p-4 overflow-x-auto">
+            <table class="w-full text-xs border">
+                <thead class="bg-gray-200">
+                    <tr class="border-b text-center">
+                        <th class="p-2">NISN</th>
+                        <th class="p-2">Nama</th>
+
+                        {{-- Header nama bulan --}}
+                        @foreach(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] as $b)
+                            <th class="p-1">{{ $b }}</th>
+                        @endforeach
+
+                        <th class="p-2">Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach($data as $d)
-                        <tr class="border-b">
-                            <td class="p-2 text-left">{{ $d['nisn'] }}</td>
-                            <td class="p-2 text-left">{{ $d['nama'] }}</td>
-                            <td class="p-2 text-left">
-                                @php
-                                    $belum = array_values(array_filter($d['status'], fn($v)=>$v=='belum'));
-                                @endphp
+                        <tr class="border-b text-center">
+                            <td class="p-2">{{ $d['nisn'] }}</td>
+                            <td class="p-2">{{ $d['nama'] }}</td>
 
-                                <span class="text-red-500">
-                                    {{ count($belum) }} Bulan Belum Lunas
-                                </span>
-                            </td>
-                            <td class=" px-4 py-2 text-center gap-2">
+                            {{-- Status tiap bulan --}}
+                            @foreach($d['status'] as $bulan => $status)
+                                <td class="p-1">
+                                    @if($status == 'lunas')
+                                        <span class="text-green-600 font-bold">✔</span>
+                                    @else
+                                        <span class="text-red-600 font-bold">✘</span>
+                                    @endif
+                                </td>
+                            @endforeach
+
+                            <td class="p-2">
                                 <div class="flex justify-center gap-2">
-                                <form action="{{ route('admin.pembayaran.bayar', $d['nisn']) }}" method="GET">
-                                    <x-primary-button type="submit">
-                                        Bayar
-                                    </x-primary-button>
-                                </form>
-                                <form action="{{ route('admin.pembayaran.history', $d['nisn']) }}" method="GET">
-                                <x-primary-button type="submit" class="bg-gray-700 hover:bg-gray-800">
-                                    History
-                                </x-primary-button>
-                                </form>
+                                    <form action="{{ route('admin.pembayaran.bayar', $d['nisn']) }}" method="GET">
+                                        <x-primary-button>Bayar</x-primary-button>
+                                    </form>
+
+                                    <form action="{{ route('admin.pembayaran.history', $d['nisn']) }}" method="GET">
+                                        <x-primary-button class="bg-gray-700 hover:bg-gray-800">
+                                            History
+                                        </x-primary-button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     </div>

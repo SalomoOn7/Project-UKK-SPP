@@ -104,6 +104,21 @@
                         label="Transaksi Pembayaran "
                     />
                 @endif
+               @if (Auth::guard('siswa')->check())
+                <x-siswa-menu-item
+                    route="siswa.dashboard"
+                    active="siswa/dashboard"
+                    icon="home"
+                    label="Dashboard"
+                />
+                
+                <x-siswa-menu-item
+                    route="siswa.pembayaran.history"
+                    active="siswa/dashboard"
+                    icon="home"
+                    label="Lihat History"
+                />
+            @endif
 
             </ul>
         </nav>

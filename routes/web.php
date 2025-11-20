@@ -32,8 +32,17 @@ Route::middleware('auth:petugas')->group(function () {
 });
 
 // Dashboard siswa
-Route::middleware('auth:siswa')->group(function () {
-    Route::get('/siswa/dashboard', fn() => view('siswa.dashboard'))->name('siswa.dashboard');
+Route::middleware('auth:siswa')->prefix('siswa')->name('siswa.')->group(function () {
+    Route::get('dashboard', fn() => view('siswa.dashboard'))->name('dashboard');
+    
+    Route::get('pembayaran', [\App\Http\Controllers\SiswaPembayaranController::class, 'index'])
+        ->name('pembayaran.index');
+
+    Route::get('pembayaran/history', [\App\Http\Controllers\SiswaPembayaranController::class, 'history'])
+        ->name('pembayaran.history');
+
+    Route::get('pembayaran/detail', [\App\Http\Controllers\SiswaPembayaranController::class, 'detail'])
+        ->name('pembayaran.detail');
 });
 
 Route::middleware('auth')->group(function () {

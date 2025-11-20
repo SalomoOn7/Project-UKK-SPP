@@ -90,11 +90,18 @@
 
                 {{-- ==== PETUGAS ==== --}}
                 @if(Auth::user()->level === 'petugas')
-                    <x-admin-menu-item
+                    <x-petugas-menu-item
                         route="petugas.dashboard"
                         active="petugas/dashboard"
                         icon="home"
                         label="Dashboard"
+                    />
+
+                    <x-petugas-menu-item
+                        route="petugas.pembayaran.index"
+                        active="petugas/pembayaran*"
+                        icon="id-badge"
+                        label="Transaksi Pembayaran "
                     />
                 @endif
 

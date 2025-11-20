@@ -1,0 +1,179 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Siswa;
+use App\Models\Pembayaran;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+class PetugasPembayaranController extends Controller
+{
+    private function statusPembayaranSiswa($nisn) {
+        $urutanBulan = [
+            "Januari","Februari","Maret","April","Mei","Juni",
+            "Juli","Agustus","September","Oktober","November","Desember"
+        ];
+
+        $bulanSudah = Pembayaran::where('nisn', $nisn)
+            ->pluck('bulan_dibayar')->toArray();
+
+        $data = [];
+        foreach ($urutanBulan as $bln) {
+            $data[$bln] = in_array($bln, $bulanSudah) ? 'lunas' : 'belum';
+        }
+
+        return $data;
+    }
+
+    public function index()
+    {
+        $siswa = Siswa::all();
+        $hasil = [];
+
+        foreach ($siswa as $s) {
+            $hasil[] = [
+                'nisn' => $s->nisn,
+                'nama' => $s->nama,
+                'status' => $this->statusPembayaranSiswa($s->nisn)
+            ];
+        }
+
+        return view('petugas.pembayaran.index', [
+            'data' => $hasil
+        ]);
+    }
+
+    public function bayar($nisn)
+    {
+        $siswa = Siswa::findOrFail($nisn);
+        $status = $this->statusPembayaranSiswa($nisn);
+        $tanggalSekarang = Carbon::now()->format('Y-m-d');
+
+        $bulanBelum = array_keys(array_filter($status, fn($v) => $v === 'belum'));
+
+        return view('petugas.pembayaran.bayar', [
+            'siswa' => $siswa,
+            'bulanBelum' => $bulanBelum,
+            'tanggalSekarang' => $tanggalSekarang,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nisn' => 'required',
+            'bulan' => 'required|array',
+            'id_spp' => 'required',
+        ]);
+
+        $siswa = Siswa::with('spp')->findOrFail($request->nisn);
+        $nominal = $siswa->spp->nominal;
+
+        $idPetugas = Auth::guard('petugas')->id();
+
+        foreach ($request->bulan as $bln) {
+            Pembayaran::create([
+                'id_petugas'    => $idPetugas,
+                'nisn'          => $request->nisn,
+                'tgl_bayar'     => now(),
+                'bulan_dibayar' => $bln,
+                'tahun_dibayar' => date('Y'),
+                'id_spp'        => $request->id_spp,
+                'jumlah_bayar'  => $nominal,
+            ]);
+        }
+
+        return redirect()->route('petugas.pembayaran.index')
+            ->with('success', 'Pembayaran berhasil!');
+    }
+
+    public function history($nisn)
+{
+    $siswa = Siswa::with(['kelas','spp', 'pembayaran.petugas'])->findOrFail($nisn);
+
+    // Ambil semua pembayaran siswa
+    $pembayaran = Pembayaran::where('nisn', $nisn)->orderBy('tgl_bayar', 'DESC')->get();
+
+    // Total bulan dibayar = jumlah record
+    $totalBulan = $pembayaran->count();
+
+    // Total pembayaran
+    $totalBayar = $pembayaran->sum('jumlah_bayar');
+
+    // Hitung tunggakan (1 tahun = 12 bulan)
+    $nominal = $siswa->spp->nominal;
+    $tunggakan = ($nominal * 12) - $totalBayar;
+
+    return view('petugas.pembayaran.history', [
+        'siswa' => $siswa,
+        'pembayaran' => $pembayaran,
+        'totalBulan' => $totalBulan,
+        'totalBayar' => $totalBayar,
+        'tunggakan' => $tunggakan,
+    ]);
+}
+public function detail($nisn){
+    $siswa = Siswa::with('kelas','spp')->findOrFail($nisn);
+    $pembayaran = Pembayaran::where('nisn', $nisn)->get();
+
+    $urutanBulan = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+
+    $sudah = $pembayaran->pluck('bulan_dibayar')->toArray();
+    $belum = array_diff($urutanBulan, $sudah);
+
+    $totalBayar = $pembayaran->sum('jumlah_bayar');
+    $tunggakan = $siswa->spp->nominal * 12 - $totalBayar;
+
+    return view('petugas.pembayaran.detail', [
+        'siswa' => $siswa,
+        'pembayaran' => $pembayaran,
+        'bulanSudah' => $sudah,
+        'bulanBelum' => $belum,
+        'totalBayar' => $totalBayar,
+        'tunggakan' => $tunggakan,
+    ]);
+}
+
+public function cetakPDF($nisn)
+{
+    $urutanBulan = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+
+    $siswa = Siswa::with('kelas','spp')->findOrFail($nisn);
+    $pembayaran = Pembayaran::where('nisn', $nisn)->get();
+
+    $bulanDibayar = $pembayaran->pluck('bulan_dibayar')->toArray();
+    $bulanBelum = array_diff($urutanBulan, $bulanDibayar);
+
+    $totalBayar = $pembayaran->sum('jumlah_bayar');
+    $tunggakan = $siswa->spp->nominal * 12 - $totalBayar;
+
+    $p = Pembayaran::with('petugas')->where('nisn', $nisn)
+            ->orderBy('tgl_bayar', 'DESC')->firstOrFail();
+
+    $hariTanggal = \Carbon\Carbon::parse($p->tgl_bayar)
+        ->translatedFormat('l, d F Y');
+
+    $pdf = Pdf::loadView('petugas.pembayaran.cetak', [
+        'siswa' => $siswa,
+        'pembayaran' => $pembayaran,
+        'bulanDibayar' => $bulanDibayar,
+        'bulanBelum' => $bulanBelum,
+        'totalBayar' => $totalBayar,
+        'tunggakan' => $tunggakan,
+        'p' => $p,
+        'hariTanggal' => strtoupper($hariTanggal)
+    ]);
+
+    return $pdf->stream('Kuitansi-SPP-'.$nisn.'.pdf');
+}
+}
+

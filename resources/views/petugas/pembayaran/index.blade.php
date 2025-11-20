@@ -37,13 +37,13 @@
 
                             <td class="p-2">
                                 <div class="flex justify-center gap-2">
-                                    <form action="{{ route('admin.pembayaran.bayar', $d['nisn']) }}" method="GET">
-                                            <x-primary-button>Bayar</x-primary-button>
-                                        </form>
+                                    <form action="{{ route('petugas.pembayaran.bayar', $d['nisn']) }}" method="GET">
+                                        <x-primary-button>Bayar</x-primary-button>
+                                    </form>
 
-                                        <form action="{{ route('admin.pembayaran.history', $d['nisn']) }}" method="GET">
-                                            <x-primary-button class="bg-gray-700 hover:bg-gray-800">History</x-primary-button>
-                                        </form>
+                                    <form action="{{ route('petugas.pembayaran.history', $d['nisn']) }}" method="GET">
+                                        <x-primary-button class="bg-gray-700 hover:bg-gray-800">History</x-primary-button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

@@ -8,6 +8,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PetugasPembayaranController;
 use App\Http\Controllers\LaporanController;
 
 Route::get('/', function () {
@@ -26,8 +27,8 @@ Route::middleware(['guest:petugas', 'guest:siswa'])->group(function () {
 
 // Dashboard petugas (admin & petugas biasa)
 Route::middleware('auth:petugas')->group(function () {
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard');
-    Route::get('/petugas/dashboard', fn() => view('petugas.dashboard'))->name('petugas.dashboard');
+    Route::get('/admin/dashboard', fn() => view('admin.dashboard'))->name('admin.dashboard')->middleware('isAdmin');
+    Route::get('/petugas/dashboard', fn() => view('petugas.dashboard'))->name('petugas.dashboard')->middleware('isPetugas');
 });
 
 // Dashboard siswa
@@ -44,52 +45,42 @@ Route::middleware('auth')->group(function () {
 // Logout
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-//CRUD Petugas 
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::resource('petugas', PetugasController::class);
-});
+// Admin
+Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    //CRUD
+        Route::resource('petugas', PetugasController::class);
+        Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'id_kelas']);
+        Route::resource('spp', SppController::class);
+        Route::resource('siswa', SiswaController::class)->parameters(['siswa' => 'nisn']);
 
-// CRUD Kelas
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::resource('kelas', KelasController::class)->parameters([
-        'kelas' => 'id_kelas'
-    ]);
-});
+        // Pembayaran ADMIN
+        Route::get('pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+        Route::get('pembayaran/{nisn}', [PembayaranController::class, 'bayar'])->name('pembayaran.bayar');
+        Route::post('pembayaran/store', [PembayaranController::class, 'store'])->name('pembayaran.store');
 
-//CRUD Spp
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::resource('spp', SppController::class);
-});
+        // History / detail / cetak
+        Route::get('pembayaran/history/{nisn}', [PembayaranController::class, 'history'])->name('pembayaran.history');
+        Route::get('pembayaran/detail/{nisn}', [PembayaranController::class, 'detail'])->name('pembayaran.detail');
+        Route::get('pembayaran/{nisn}/cetak', [PembayaranController::class, 'cetakPDF'])->name('pembayaran.cetak');
 
-//CRUD Siswa
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::resource('siswa', SiswaController::class)->parameters([
-        'siswa' => 'nisn'
-    ]);
-});
+        // Laporan
+        Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('laporan/cari', [LaporanController::class, 'cari'])->name('laporan.cari');
+        Route::get('laporan/cetak/{id_kelas}', [LaporanController::class, 'cetakPDF'])->name('laporan.cetak');
+    });
 
-//Pembayaran
-Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    Route::get( 'pembayaran',[PembayaranController::class, 'index'])->name('pembayaran.index');
+// Petugas
+Route::middleware(['auth:petugas', 'isPetugas'])->prefix('petugas')->name('petugas.')->group(function () {
 
-    Route::get('pembayaran/{nisn}',[PembayaranController::class, 'bayar'])->name('pembayaran.bayar');
+        Route::get('pembayaran', [PetugasPembayaranController::class, 'index'])->name('pembayaran.index'); 
+        Route::get('pembayaran/bayar/{nisn}', [PetugasPembayaranController::class, 'bayar'])->name('pembayaran.bayar');
+        Route::post('pembayaran/store', [PetugasPembayaranController::class, 'store'])->name('pembayaran.store');
 
-    Route::post('pembayaran/store',[PembayaranController::class, 'store'])->name('pembayaran.store');
-});
+        Route::get('pembayaran/history/{nisn}', [PetugasPembayaranController::class, 'history'])->name('pembayaran.history');
+        Route::get('pembayaran/detail/{nisn}', [PetugasPembayaranController::class, 'detail'])->name('pembayaran.detail');
+        Route::get('pembayaran/cetak/{nisn}', [PetugasPembayaranController::class, 'cetakPDF'])->name('pembayaran.cetak');
 
-// History  per siswa
-Route::get('admin/pembayaran/history/{nisn}', [PembayaranController::class, 'history'])->name('admin.pembayaran.history');
-Route::get('/detail/{nisn}', [PembayaranController::class, 'detail'])->name('admin.pembayaran.detail');
-Route::get('/admin/pembayaran/{nisn}/cetak',[PembayaranController::class, 'cetakPDF'] )->name('admin.pembayaran.cetak');
-
-//Laporan dan FIlter Kelas
-Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
-//Proses Cari Filter
-Route::get('/laporan/cari', [LaporanController::class, 'cari'])->name('admin.laporan.cari');
-//Cetak PDF perkelas
-Route::get('/laporan/cetak/{id_kelas}', [LaporanController::class, 'cetakPDF'])->name('admin.laporan.cetak');
+        Route::get('laporan', [PetugasPembayaranController::class, 'index'])->name('laporan.index');
+        Route::get('laporan/cari', [PetugasPembayaranController::class, 'cari'])->name('laporan.cari');
+        Route::get('laporan/cetak/{id_kelas}', [PetugasPembayaranController::class, 'cetakPDF'])->name('laporan.cetak');
+    });

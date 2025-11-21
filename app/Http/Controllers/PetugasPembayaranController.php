@@ -195,5 +195,29 @@ public function cetakPDF($nisn)
 
     return $pdf->stream('Kuitansi-SPP-'.$nisn.'.pdf');
 }
+
+public function kartuSPP($nisn)
+{
+    $urutanBulan = [
+        "Juli","Agustus","September","Oktober","November","Desember",
+        "Januari","Februari","Maret","April","Mei","Juni"
+    ];
+
+    $siswa = Siswa::with(['kelas','spp'])->findOrFail($nisn);
+
+    // Ambil seluruh pembayaran siswa ini
+    $pembayaran = Pembayaran::where('nisn', $nisn)
+        ->get()
+        ->keyBy('bulan_dibayar'); 
+        // keyBy agar mudah dipanggil berdasarkan nama bulan
+
+    $pdf = \PDF::loadView('petugas.pembayaran.kartu_spp', [
+        'siswa' => $siswa,
+        'pembayaran' => $pembayaran,
+        'urutanBulan' => $urutanBulan
+    ])->setPaper('a4', 'portrait');
+
+    return $pdf->stream('kartu spp '.$siswa->nama.'.pdf');
+}
 }
 

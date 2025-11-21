@@ -90,6 +90,7 @@ Route::middleware(['auth:petugas', 'isPetugas'])->prefix('petugas')->name('petug
         Route::get('pembayaran/history/{nisn}', [PetugasPembayaranController::class, 'history'])->name('pembayaran.history');
         Route::get('pembayaran/detail/{nisn}', [PetugasPembayaranController::class, 'detail'])->name('pembayaran.detail');
         Route::get('pembayaran/cetak/{nisn}', [PetugasPembayaranController::class, 'cetakPDF'])->name('pembayaran.cetak');
+        Route::get('admin/siswa/{nisn}/kartu_spp', [PetugasPembayaranController::class, 'kartuSpp'])->name('pembayaran.kartu_spp');
 
         Route::get('laporan', [PetugasPembayaranController::class, 'index'])->name('laporan.index');
         Route::get('laporan/cari', [PetugasPembayaranController::class, 'cari'])->name('laporan.cari');

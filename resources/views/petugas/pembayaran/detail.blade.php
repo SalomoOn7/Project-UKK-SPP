@@ -86,6 +86,13 @@
               </x-primary-button>
           </a>
         </div>
+        <div class="p-4">
+             <form action="{{ route('petugas.pembayaran.kartu_spp', $siswa->nisn) }}" method="GET" target="_blank">
+                <x-primary-button>
+                    Cetak Kartu SPP
+                </x-primary-button>
+            </form>
+        </div>
         </div>
 
     </div>

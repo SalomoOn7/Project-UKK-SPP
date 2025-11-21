@@ -19,10 +19,8 @@
         {{-- Logo Sekolah --}}
         <div class="p-4 border-b flex items-center justify-center">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 bg-blue-600 rounded-lg flex justify-center items-center shadow-sm">
-                    <svg class="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                    </svg>
+                <div class="w-16 h-16 rounded-full flex justify-center items-center shadow-lg">
+                    <img src="{{ asset('image/logo-ti.png') }}" alt="Logo Sekolah"class="w-full h-full object-cover">
                 </div>
                 <div>
                     <div class="font-bold text-gray-800 text-sm">SMK TIP Cimahi</div>
@@ -47,42 +45,42 @@
                     <x-admin-menu-item
                         route="admin.petugas.index"
                         active="admin/petugas*"
-                        icon="id-badge"
+                        icon="petugas"
                         label="Manajemen Petugas"
                     />
 
                     <x-admin-menu-item
                         route="admin.kelas.index"
                         active="admin/kelas*"
-                        icon="id-badge"
+                        icon="kelas"
                         label="Manajemen Kelas"
                     />
 
                     <x-admin-menu-item
                         route="admin.spp.index"
                         active="admin/spp*"
-                        icon="id-badge"
+                        icon="bayar"
                         label="Manajemen SPP"
                     />
 
                     <x-admin-menu-item
                         route="admin.siswa.index"
                         active="admin/siswa*"
-                        icon="id-badge"
+                        icon="siswa"
                         label="Manajemen Siswa"
                     />
 
                     <x-admin-menu-item
                         route="admin.pembayaran.index"
                         active="admin/pembayaran*"
-                        icon="id-badge"
+                        icon="transaksi"
                         label="Transaksi Pembayaran "
                     />
 
                     <x-admin-menu-item
                         route="admin.laporan.index"
                         active="admin/laporan*"
-                        icon="id-badge"
+                        icon="laporan"
                         label="Laporan "
                     />
 
@@ -90,32 +88,32 @@
 
                 {{-- ==== PETUGAS ==== --}}
                 @if(Auth::user()->level === 'petugas')
-                    <x-petugas-menu-item
+                    <x-admin-menu-item
                         route="petugas.dashboard"
                         active="petugas/dashboard"
                         icon="home"
                         label="Dashboard"
                     />
 
-                    <x-petugas-menu-item
+                    <x-admin-menu-item
                         route="petugas.pembayaran.index"
                         active="petugas/pembayaran*"
-                        icon="id-badge"
+                        icon="transaksi"
                         label="Transaksi Pembayaran "
                     />
                 @endif
                @if (Auth::guard('siswa')->check())
-                <x-siswa-menu-item
+                <x-admin-menu-item
                     route="siswa.dashboard"
                     active="siswa/dashboard"
                     icon="home"
                     label="Dashboard"
                 />
                 
-                <x-siswa-menu-item
+                <x-admin-menu-item
                     route="siswa.pembayaran.history"
                     active="siswa/dashboard"
-                    icon="home"
+                    icon="history"
                     label="Lihat History"
                 />
             @endif

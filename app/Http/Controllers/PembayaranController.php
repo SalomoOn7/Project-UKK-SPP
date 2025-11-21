@@ -221,6 +221,19 @@ public function kartuSPP($nisn)
 
     return $pdf->stream('kartu spp '.$siswa->nama.'.pdf');
 }
+public function dashboard()
+{
+    return view('admin.dashboard', [
+        'totalSiswa' => Siswa::count(),
+        'totalKelas' => Kelas::count(),
+        'totalPetugas' =>Petugas::count(),
+
+        // total pembayaran bulan ini
+        'totalPembayaranBulanIni' => \App\Models\Pembayaran::whereMonth(
+            'tgl_bayar', now()->month
+        )->sum('jumlah_bayar'),
+    ]);
+}
 
 
 }

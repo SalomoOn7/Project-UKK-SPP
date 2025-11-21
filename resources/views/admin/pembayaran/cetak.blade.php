@@ -47,7 +47,7 @@
 
     <table>
         <tr>
-            <th>NISN</th><td>: {{ $siswa->nisn }}</td>
+            <th>NIS</th><td>: {{ $siswa->nis }}</td>
             <th>Nama</th><td>: {{ $siswa->nama }}</td>
         </tr>
         <tr>

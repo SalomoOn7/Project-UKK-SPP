@@ -72,28 +72,30 @@
             </table>
         </div>
 
-        {{-- Tombol PDF --}}
-        <div class="mt-4">
-            <form action="{{ route('petugas.pembayaran.cetak', $siswa->nisn) }}" method="GET" target="_blank">
-                <x-primary-button>
-                    Cetak Kuitansi PDF
-                </x-primary-button>
-            </form>
-            <div class=" p-4">
-            <a href="{{ route('petugas.pembayaran.history', ['nisn' => $siswa->nisn]) }}">
-              <x-primary-button>
-                  Kembali
-              </x-primary-button>
-          </a>
-        </div>
-        <div class="p-4">
-             <form action="{{ route('petugas.pembayaran.kartu_spp', $siswa->nisn) }}" method="GET" target="_blank">
-                <x-primary-button>
-                    Cetak Kartu SPP
-                </x-primary-button>
-            </form>
-        </div>
-        </div>
+        {{-- Tombol Aksi --}}
+<div class="mt-6 flex flex-wrap gap-3">
 
+    {{-- Cetak Kuitansi PDF --}}
+    <form action="{{ route('petugas.pembayaran.cetak', $siswa->nisn) }}" 
+          method="GET" target="_blank">
+        <x-primary-button>
+            Cetak Kuitansi PDF
+        </x-primary-button>
+    </form>
+
+        <form action="{{ route('petugas.pembayaran.kartu_spp', $siswa->nisn) }}" 
+          method="GET" target="_blank">
+        <x-primary-button>
+            Cetak Kartu SPP
+        </x-primary-button>
+    </form>
+
+    <a href="{{ route('petugas.pembayaran.history', ['nisn' => $siswa->nisn]) }}">
+        <x-primary-button class="bg-gray-600 hover:bg-gray-700">
+            Kembali
+        </x-primary-button>
+    </a>
+</div>
+        </div>
     </div>
 </x-sidebar-layout>

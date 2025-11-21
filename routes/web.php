@@ -56,6 +56,7 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin
 Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('dashboard', [PembayaranController::class, 'dashboard'])->name('dashboard');
     //CRUD
         Route::resource('petugas', PetugasController::class);
         Route::resource('kelas', KelasController::class)->parameters(['kelas' => 'id_kelas']);
@@ -72,6 +73,7 @@ Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')-
         Route::get('pembayaran/detail/{nisn}', [PembayaranController::class, 'detail'])->name('pembayaran.detail');
         Route::get('pembayaran/{nisn}/cetak', [PembayaranController::class, 'cetakPDF'])->name('pembayaran.cetak');
         Route::get('admin/siswa/{nisn}/kartu_spp', [PembayaranController::class, 'kartuSpp'])->name('pembayaran.kartu_spp');
+
 
 
         // Laporan

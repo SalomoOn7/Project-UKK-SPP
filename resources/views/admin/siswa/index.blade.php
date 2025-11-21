@@ -6,6 +6,16 @@
 <div class="mb-4">
     <h1 class="text-xl font-semibold mb-3">Manajemen Siswa</h1>
 
+    @if ($errors->any())
+            <div class="bg-red-100 text-red-700 border border-red-400 p-3 rounded mb-4">
+                <b>Terjadi kesalahan:</b>
+                <ul class="mt-2 ml-4 list-disc">
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     {{-- FORM FILTER --}}
             <form method="GET" class="flex gap-3 items-center mb-4">
                 <select name="kelas" class="border px-3 py-2 rounded">

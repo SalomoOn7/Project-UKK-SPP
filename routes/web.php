@@ -71,6 +71,8 @@ Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')-
         Route::get('pembayaran/history/{nisn}', [PembayaranController::class, 'history'])->name('pembayaran.history');
         Route::get('pembayaran/detail/{nisn}', [PembayaranController::class, 'detail'])->name('pembayaran.detail');
         Route::get('pembayaran/{nisn}/cetak', [PembayaranController::class, 'cetakPDF'])->name('pembayaran.cetak');
+        Route::get('admin/siswa/{nisn}/kartu_spp', [PembayaranController::class, 'kartuSpp'])->name('pembayaran.kartu_spp');
+
 
         // Laporan
         Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');

@@ -80,6 +80,13 @@
                 </x-primary-button>
             </form>
         </div>
+        <div class="mt-4">
+            <form action="{{ route('admin.pembayaran.kartu_spp', $siswa->nisn) }}" method="GET" target="_blank">
+                <x-primary-button>
+                    Cetak Kartu SPP
+                </x-primary-button>
+            </form>
+        </div>
 
     </div>
 </x-sidebar-layout>

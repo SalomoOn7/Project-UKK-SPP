@@ -3,8 +3,29 @@
     <div class="p-6">
 
         {{-- HEADER --}}
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-xl font-semibold">Manajemen Siswa</h1>
+<div class="mb-4">
+    <h1 class="text-xl font-semibold mb-3">Manajemen Siswa</h1>
+
+    {{-- FORM FILTER --}}
+            <form method="GET" class="flex gap-3 items-center mb-4">
+                <select name="kelas" class="border px-3 py-2 rounded">
+                    <option value=""> Semua Kelas </option>
+                    @foreach($kelas as $k)
+                        <option value="{{ $k->id_kelas }}"
+                            {{ $filterKelas == $k->id_kelas ? 'selected' : '' }}>
+                            {{ $k->nama_kelas }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <input type="text" name="nama" class="border px-3 py-2 rounded"
+                    placeholder="Cari nama..." value="{{ $filterNama }}">
+
+                <button class="bg-blue-600 text-white px-4 py-2 rounded">
+                    Cari / Filter
+                </button>
+            </form>
+
             <x-primary-button x-data=""
                 x-on:click="$dispatch('open-modal', 'modal-create-siswa')">
                 + Tambah Siswa

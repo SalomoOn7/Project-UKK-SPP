@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\Kelas;
 use App\Models\Petugas;
 use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Auth;
@@ -31,23 +32,43 @@ class PembayaranController extends Controller
     return $data;
 }
 
-    public function index()
-    {
-        $siswa = Siswa::all();
-        $hasil = [];
+    public function index(Request $request)
+{
+    $filterKelas = $request->kelas;
+    $filterNama  = $request->nama;
 
-        foreach ($siswa as $s) {
-            $hasil[] = [
-                'nisn' => $s->nisn,
-                'nama' => $s->nama,
-                'status' => $this->statusPembayaranSiswa($s->nisn)
-            ];
-        }
+    $siswaQuery = Siswa::with('kelas');
 
-        return view('admin.pembayaran.index', [
-            'data' => $hasil
-        ]);
+    if ($filterKelas) {
+        $siswaQuery->where('id_kelas', $filterKelas);
     }
+
+    if ($filterNama) {
+        $siswaQuery->where('nama', 'LIKE', '%' . $filterNama . '%');
+    }
+
+    $siswa = $siswaQuery->get();
+
+
+    $hasil = [];
+    foreach ($siswa as $s) {
+        $hasil[] = [
+            'nisn' => $s->nisn,
+            'nama' => $s->nama,
+            'kelas' => $s->kelas->nama_kelas ?? '-',
+            'id_kelas' => $s->id_kelas,
+            'status' => $this->statusPembayaranSiswa($s->nisn)
+        ];
+    }   
+
+    return view('admin.pembayaran.index', [
+        'data' => $hasil,
+        'kelas' => Kelas::all(),
+        'filterKelas' => $filterKelas,
+        'filterNama' => $filterNama,
+    ]);
+}
+
 
     public function bayar($nisn){
         $siswa = Siswa::findOrFail($nisn);

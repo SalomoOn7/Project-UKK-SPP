@@ -40,47 +40,56 @@ class SiswaPembayaranController extends Controller
     }
 
     public function history()
-    {
-        $siswa = Auth::guard('siswa')->user();
-        $pembayaran = Pembayaran::where('nisn', $siswa->nisn)
-            ->orderBy('tgl_bayar', 'DESC')
-            ->get();
-            $totalBulan = $pembayaran->count();
-        // Jika siswa belum pernah bayar → tampilkan pesan
-        if ($pembayaran->count() == 0) {
-            return view('siswa.pembayaran.history', [
-                'siswa' => $siswa,
-                'pembayaran' => [],
-                'belumBayar' => true
-            ]);
-        }
+{
+    $siswa = Auth::guard('siswa')->user();
+    $pembayaran = Pembayaran::where('nisn', $siswa->nisn)
+        ->orderBy('tgl_bayar', 'DESC')
+        ->get();
 
-        $totalBayar = $pembayaran->sum('jumlah_bayar');
-        $tunggakan = ($siswa->spp->nominal * 12) - $totalBayar;
+    $totalBulan = $pembayaran->count();
+    $totalBayar = $pembayaran->sum('jumlah_bayar');
 
+    // Jika belum pernah bayar
+    if ($pembayaran->isEmpty()) {
         return view('siswa.pembayaran.history', [
             'siswa' => $siswa,
-            'pembayaran' => $pembayaran,
-            'belumBayar' => false,
-            'totalBayar' => $totalBayar,
-            'tunggakan' => $tunggakan,
-             'totalBulan' => $totalBulan
+            'pembayaran' => [],
+            'belumBayar' => true,
+            'totalBulan' => 0,      // <-- penting
+            'totalBayar' => 0,      // <-- penting
         ]);
     }
+
+    $tunggakan = ($siswa->spp->nominal * 12) - $totalBayar;
+
+    return view('siswa.pembayaran.history', [
+        'siswa' => $siswa,
+        'pembayaran' => $pembayaran,
+        'belumBayar' => false,
+        'totalBayar' => $totalBayar,
+        'tunggakan' => $tunggakan,
+        'totalBulan' => $totalBulan
+    ]);
+}
 
     public function detail()
     {
         $siswa = Auth::guard('siswa')->user();
         $pembayaran = Pembayaran::where('nisn', $siswa->nisn)->get();
+        $totalBulan = $pembayaran->count();
 
         if ($pembayaran->count() == 0) {
             return view('siswa.pembayaran.detail', [
                 'siswa' => $siswa,
                 'pembayaran' => [],
-                'belumBayar' => true
+                'belumBayar' => true,
+                'totalBulan' => 0,
+                'totalBayar' => 0,
+                'bulanSudah' => [],
+                'bulanBelum' => [],
+                'tunggakan' => $siswa->spp->nominal * 12
             ]);
         }
-
         $urutanBulan = [
             "Januari","Februari","Maret","April","Mei","Juni",
             "Juli","Agustus","September","Oktober","November","Desember"
@@ -100,6 +109,7 @@ class SiswaPembayaranController extends Controller
             'belumBayar' => false,
             'totalBayar' => $totalBayar,
             'tunggakan' => $tunggakan,
+            'totalBulan' => $totalBulan
         ]);
     }
 }

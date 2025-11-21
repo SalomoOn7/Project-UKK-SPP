@@ -44,7 +44,8 @@
 </head>
 <body>
 
-    <h2>Laporan Pembayaran SPP Kelas {{ $kelas->nama_kelas }}</h2>
+    <h2>Laporan Pembayaran SPP  SMK TI Pembangunan Cimahi</h2>
+    <h2>Kelas {{ $kelas->nama_kelas }}</h2>
 
     <table class="w-full border-collapse text-xs">
     <thead>

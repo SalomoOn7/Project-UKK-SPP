@@ -79,6 +79,13 @@
                     Cetak Kuitansi PDF
                 </x-primary-button>
             </form>
+            <div class=" p-4">
+            <a href="{{ route('petugas.pembayaran.history', ['nisn' => $siswa->nisn]) }}">
+              <x-primary-button>
+                  Kembali
+              </x-primary-button>
+          </a>
+        </div>
         </div>
 
     </div>

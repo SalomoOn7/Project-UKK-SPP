@@ -19,7 +19,7 @@
                 </p>
 
                 <p><strong>Total Bulan Dibayar:</strong> 
-                    {{ count($bulanSudah) }} Bulan
+                    {{ count($bulanSudah ?? []) }} Bulan
                 </p>
 
                 <p ><strong>Total Bayar:</strong> 
@@ -38,38 +38,11 @@
 
         {{-- Tabel Pembayaran --}}
         <div class="bg-white rounded shadow p-4">
-            <h2 class="font-semibold text-lg mb-3">Riwayat Pembayaran</h2>
-
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b bg-gray-100">
-                        <th class="p-2 text-left">Bulan</th>
-                        <th class="p-2 text-left">Tanggal Bayar</th>
-                        <th class="p-2 text-left">Petugas</th>
-                        <th class="p-2 text-left">Jumlah Bayar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pembayaran as $p)
-                        <tr class="border-b">
-                            {{-- Solusi A → bulan_dibayar adalah string biasa --}}
-                            <td class="p-2">{{ $p->bulan_dibayar }}</td>
-
-                            <td class="p-2">
-                                {{ \Carbon\Carbon::parse($p->tgl_bayar)->format('d-m-Y') }}
-                            </td>
-
-                            <td class="p-2">
-                                {{ $p->petugas->nama_petugas ?? '-' }}
-                            </td>
-
-                            <td class="p-2">
-                                Rp {{ number_format($p->jumlah_bayar, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <a href="{{ route('siswa.pembayaran.history') }}">
+              <x-primary-button>
+              Kembali
+            </x-primary-button>
+          </a>
         </div>
 
     </div>

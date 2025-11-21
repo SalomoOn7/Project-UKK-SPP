@@ -51,11 +51,8 @@
             <th>Nama</th><td>: {{ $siswa->nama }}</td>
         </tr>
         <tr>
-            <th>Kelas</th>
-            <td>: {{ $siswa->kelas->nama_kelas }}</td>
-
-            <th>Tanggal Bayar</th>
-            <td>: {{ \Carbon\Carbon::parse($p->tgl_bayar)->format('Y-m-d') }}</td>
+            <th>Kelas</th><td>: {{ $siswa->kelas->nama_kelas }}</td>
+            <th>&nbsp;</th><td>&nbsp;</td> <!-- Kosongkan untuk rapi -->
         </tr>
     </table>
 
@@ -65,6 +62,7 @@
         <thead>
             <tr>
                 <th>Tahun</th>
+                <th>Tanggal Bayar</th> 
                 <th>Bulan</th>
                 <th>Nominal</th>
             </tr>
@@ -74,13 +72,15 @@
             @foreach($pembayaran as $pay)
             <tr>
                 <td>{{ $pay->tahun_dibayar }}</td>
+                 <td>{{ \Carbon\Carbon::parse($pay->tgl_bayar)->format('Y-m-d') }}</td>
                 <td>{{ $pay->bulan_dibayar }}</td>
                 <td>Rp {{ number_format($pay->jumlah_bayar, 0, ',', '.') }}</td>
+               
             </tr>
             @endforeach
 
             <tr class="total-row">
-                <td colspan="2">Total Bayar</td>
+                <td colspan="3">Total Bayar</td>
                 <td>Rp {{ number_format($totalBayar, 0, ',', '.') }}</td>
             </tr>
         </tbody>

@@ -9,13 +9,32 @@ use Illuminate\Http\Request;
 
 class SiswaController extends Controller
 {
-    public function index()
-    {
-        $spp = Spp::all();
-        $kelas = Kelas::all();
-        $siswa =  Siswa::with(['kelas', 'spp'])->get();
-        return view('admin.siswa.index', compact('siswa', 'kelas', 'spp'));
+    public function index(Request $request)
+{
+    $filterKelas = $request->kelas;
+    $filterNama  = $request->nama;
+
+    $query = Siswa::with(['kelas','spp']);
+
+    if ($filterKelas) {
+        $query->where('id_kelas', $filterKelas);
     }
+
+    if ($filterNama) {
+        $query->where('nama', 'LIKE', '%' . $filterNama . '%');
+    }
+
+    $siswa = $query->get();
+
+    return view('admin.siswa.index', [
+        'siswa'       => $siswa,
+        'kelas'       => Kelas::all(),
+        'spp'         => Spp::all(),
+        'filterKelas' => $filterKelas,
+        'filterNama'  => $filterNama,
+    ]);
+}
+
 
     public function create()
     {

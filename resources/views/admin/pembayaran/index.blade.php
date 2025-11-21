@@ -1,6 +1,28 @@
 <x-sidebar-layout>
     <div class="p-6">
         <h1 class="text-xl font-bold mb-4">Data Pembayaran Siswa</h1>
+         {{-- FILTER FORM --}}
+        {{-- FILTER & SEARCH FORM --}}
+        <form method="GET" class="mb-4 flex gap-3">
+
+    <select name="kelas" class="border px-3 py-2 rounded">
+        <option value=""> Semua Kelas </option>
+        @foreach($kelas as $k)
+            <option value="{{ $k->id_kelas  }}" 
+                {{ $filterKelas == $k->id_kelas  ? 'selected' : '' }}>
+                {{ $k->nama_kelas }}
+            </option>
+        @endforeach
+    </select>
+
+    <input type="text" name="nama" class="border px-3 py-2 rounded"
+           placeholder="Cari nama..." value="{{ $filterNama }}">
+
+    <button class="bg-blue-600 text-white px-4 py-2 rounded">
+        Cari / Filter
+    </button>
+
+</form>
 
         <div class="bg-white shadow rounded p-4 overflow-x-auto">
             <table class="w-full text-sm border">
@@ -8,7 +30,7 @@
                     <tr class="border-b text-center">
                         <th class="p-2">NISN</th>
                         <th class="p-2">Nama</th>
-
+                        <th class="p-2">Kelas</th>
                         {{-- Header nama bulan --}}
                         @foreach(["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] as $b)
                             <th class="p-1">{{ $b }}</th>
@@ -23,7 +45,7 @@
                         <tr class="border-b text-center">
                             <td class="p-2">{{ $d['nisn'] }}</td>
                             <td class="p-2">{{ $d['nama'] }}</td>
-
+                            <td class="p-2">{{ $d['kelas'] }}</td>
                             {{-- Status tiap bulan --}}
                             @foreach($d['status'] as $bulan => $status)
                                 <td class="p-1">

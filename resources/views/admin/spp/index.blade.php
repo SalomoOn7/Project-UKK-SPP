@@ -13,6 +13,16 @@
         </x-primary-button>
     </div>
 
+    @if ($errors->any())
+    <div class="bg-red-100 text-red-700 p-2 rounded mb-3 text-sm">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>- {{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     {{-- Tabel --}}
     <div class="bg-white shadow-md rounded-lg p-4">
         <table class="w-full border-collapse">
@@ -63,7 +73,6 @@
             @csrf
 
             <h2 class="text-lg font-semibold">Tambah SPP</h2>
-
             <div class="mt-4">
                 <x-input-label value="Tahun" />
                 <x-text-input name="tahun" type="number" class="mt-1 block w-full" required />

@@ -11,6 +11,15 @@
             + Tambah Kelas
         </x-primary-button>
     </div>
+    @if ($errors->any())
+    <div class="p-2 bg-red-200 text-red-700 rounded mb-3">
+        <ul class="text-sm">
+            @foreach ($errors->all() as $error)
+                <li>• {{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     {{-- Tabel kelas --}}
     <div class="bg-white shadow-md rounded-lg p-4">

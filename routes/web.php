@@ -10,6 +10,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PetugasPembayaranController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SiswaPembayaranController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,16 +34,10 @@ Route::middleware('auth:petugas')->group(function () {
 
 // Dashboard siswa
 Route::middleware('auth:siswa')->prefix('siswa')->name('siswa.')->group(function () {
-    Route::get('dashboard', fn() => view('siswa.dashboard'))->name('dashboard');
-    
-    Route::get('pembayaran', [\App\Http\Controllers\SiswaPembayaranController::class, 'index'])
-        ->name('pembayaran.index');
-
-    Route::get('pembayaran/history', [\App\Http\Controllers\SiswaPembayaranController::class, 'history'])
-        ->name('pembayaran.history');
-
-    Route::get('pembayaran/detail', [\App\Http\Controllers\SiswaPembayaranController::class, 'detail'])
-        ->name('pembayaran.detail');
+    Route::get('dashboard', [SiswaPembayaranController::class, 'dashboard'])->name('dashboard');
+    Route::get('pembayaran', [SiswaPembayaranController::class, 'index'])->name('pembayaran.index');
+    Route::get('pembayaran/history', [SiswaPembayaranController::class, 'history'])->name('pembayaran.history');
+    Route::get('pembayaran/detail', [SiswaPembayaranController::class, 'detail'])->name('pembayaran.detail');
 });
 
 Route::middleware('auth')->group(function () {
@@ -85,6 +80,7 @@ Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')-
 // Petugas
 Route::middleware(['auth:petugas', 'isPetugas'])->prefix('petugas')->name('petugas.')->group(function () {
 
+    Route::get('dashboard', [PetugasPembayaranController::class, 'dashboard'])->name('dashboard');
         Route::get('pembayaran', [PetugasPembayaranController::class, 'index'])->name('pembayaran.index'); 
         Route::get('pembayaran/bayar/{nisn}', [PetugasPembayaranController::class, 'bayar'])->name('pembayaran.bayar');
         Route::post('pembayaran/store', [PetugasPembayaranController::class, 'store'])->name('pembayaran.store');

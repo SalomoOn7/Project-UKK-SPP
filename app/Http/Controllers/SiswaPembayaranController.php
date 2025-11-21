@@ -112,4 +112,27 @@ class SiswaPembayaranController extends Controller
             'totalBulan' => $totalBulan
         ]);
     }
+
+    public function dashboard()
+{
+    $siswa = Auth::guard('siswa')->user();
+
+    $pembayaran = Pembayaran::where('nisn', $siswa->nisn)->get();
+
+    $urutanBulan = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+
+    $bulanSudah = $pembayaran->pluck('bulan_dibayar')->toArray();
+    $bulanBelum = array_diff($urutanBulan, $bulanSudah);
+
+    $totalBayar = $pembayaran->sum('jumlah_bayar');
+    $tunggakan = $siswa->spp->nominal * 12 - $totalBayar;
+
+    return view('siswa.dashboard', compact(
+        'siswa', 'bulanSudah', 'bulanBelum', 'totalBayar', 'tunggakan'
+    ));
+}
+
 }

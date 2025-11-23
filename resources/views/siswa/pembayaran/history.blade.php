@@ -104,4 +104,5 @@
             </table>
         </div>
     </div>
+    
 </x-sidebar-layout>

@@ -83,6 +83,12 @@
                         icon="laporan"
                         label="Laporan "
                     />
+                    <x-admin-menu-item
+                        route="admin.logAktivitas"
+                        active="admin/log_aktivitas*"
+                        icon="history"
+                        label="Log Aktivitas "
+                    />
 
                 @endif
 

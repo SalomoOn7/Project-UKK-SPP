@@ -103,5 +103,12 @@
                 </tbody>
             </table>
         </div>
+         <div class="mt-4">
+            <a href="{{ route('petugas.pembayaran.index', $siswa->nisn) }}">
+                <x-primary-button class="mt-4">
+                    Kembali
+                </x-primary-button>
+            </a>
+        </div>
     </div>
 </x-sidebar-layout>

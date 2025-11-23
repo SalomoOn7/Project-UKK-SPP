@@ -1,19 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\AuthController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\Models\ActivityLog;
 
 class AuthController extends Controller
 {
-    // Tampilkan login form (pakai view Breeze)
     public function showLoginForm()
     {
-        return view('auth.login'); // login.blade.php Breeze
+        return view('auth.login');
     }
 
-    // Proses login
+    // Proses Login
     public function login(Request $request)
     {
         $request->validate([
@@ -25,8 +26,20 @@ class AuthController extends Controller
 
         // Login petugas
         if (Auth::guard('petugas')->attempt($credentials)) {
+
             $request->session()->regenerate();
             $user = Auth::guard('petugas')->user();
+
+            // 🔥 CATAT LOG LOGIN
+            ActivityLog::create([
+                'user_id'   => $user->id_petugas,
+                'user_type' => 'petugas',
+                'aktivitas' => 'Login',
+                'waktu' => now(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
             return $user->level === 'admin'
                 ? redirect()->route('admin.dashboard')
                 : redirect()->route('petugas.dashboard');
@@ -34,7 +47,20 @@ class AuthController extends Controller
 
         // Login siswa
         if (Auth::guard('siswa')->attempt($credentials)) {
+
             $request->session()->regenerate();
+            $user = Auth::guard('siswa')->user();
+
+            // 🔥 CATAT LOG LOGIN
+            ActivityLog::create([
+                'user_id'   => $user->nisn,
+                'user_type' => 'siswa',
+                'aktivitas' => 'Login',
+                'waktu' => now(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
             return redirect()->route('siswa.dashboard');
         }
 
@@ -43,14 +69,38 @@ class AuthController extends Controller
         ])->withInput();
     }
 
-    // Logout
+    // Proses Logout
     public function logout(Request $request)
     {
         if (Auth::guard('petugas')->check()) {
+            $user = Auth::guard('petugas')->user();
+
+            // 🔥 CATAT LOG LOGOUT
+            ActivityLog::create([
+                'user_id'   => $user->id_petugas,
+                'user_type' => 'petugas',
+                'aktivitas' => 'Logout',
+                'waktu' => now(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
             Auth::guard('petugas')->logout();
         }
 
         if (Auth::guard('siswa')->check()) {
+            $user = Auth::guard('siswa')->user();
+
+            // 🔥 CATAT LOG LOGOUT
+            ActivityLog::create([
+                'user_id'   => $user->nisn,
+                'user_type' => 'siswa',
+                'aktivitas' => 'Logout',
+                'waktu' => now(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
             Auth::guard('siswa')->logout();
         }
 

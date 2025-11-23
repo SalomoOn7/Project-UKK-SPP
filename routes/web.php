@@ -11,6 +11,7 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PetugasPembayaranController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SiswaPembayaranController;
+use App\Http\Controllers\ActivityLogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,6 +52,9 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin
 Route::middleware(['auth:petugas', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    // Log  Aktivitas
+    Route::get('/log-aktivitas', [ActivityLogController::class, 'index'])->name('logAktivitas');
+    
     Route::get('dashboard', [PembayaranController::class, 'dashboard'])->name('dashboard');
     //CRUD
         Route::resource('petugas', PetugasController::class);

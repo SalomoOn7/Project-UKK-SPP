@@ -103,5 +103,11 @@
                 </tbody>
             </table>
         </div>
+            <form action="{{ route('admin.pembayaran.index', $siswa->nisn) }}" method="GET">
+        <x-primary-button>
+            Kembali
+        </x-primary-button>
+    </form>
     </div>
+
 </x-sidebar-layout>

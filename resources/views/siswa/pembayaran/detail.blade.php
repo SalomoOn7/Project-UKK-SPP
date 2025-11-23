@@ -44,6 +44,5 @@
             </x-primary-button>
           </a>
         </div>
-
     </div>
 </x-sidebar-layout>

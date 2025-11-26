@@ -16,8 +16,8 @@ class PembayaranController extends Controller
     private function statusPembayaranSiswa($nisn){
 
     $urutanBulan = [
-        "Januari","Februari","Maret","April","Mei","Juni",
-        "Juli","Agustus","September","Oktober","November","Desember"
+        "Juli","Agustus","September","Oktober","November","Desember",
+        "Januari","Februari","Maret","April","Mei","Juni"
     ];
 
     $bulanSudah = Pembayaran::where('nisn', $nisn)

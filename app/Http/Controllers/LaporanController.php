@@ -21,7 +21,7 @@ class LaporanController extends Controller
         $id_kelas = $request->id_kelas;
 
         $kelas = Kelas::all();
-        $siswa = Siswa::with('spp', 'kelas')->where('id_kelas', $id_kelas)->get();
+        $siswa = Siswa::with('spp','kelas')->where('id_kelas', $id_kelas)->get();
 
         return view('admin.laporan.index', compact('kelas', 'siswa', 'id_kelas'));
     }
@@ -47,7 +47,7 @@ class LaporanController extends Controller
     $dataPerBulan = [];
     $totalBayar = 0;
 
-    foreach ($bulanList as $bulan) {
+    foreach ($bulanList as $bulan) {  // Cek bulan udah di bayar atau belum
 
         $pay = $pembayaran
                 ->filter(fn($p) => stripos($p->bulan_dibayar, $bulan) !== false)

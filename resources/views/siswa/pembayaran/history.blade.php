@@ -1,11 +1,8 @@
 <x-sidebar-layout>
     <div class="p-6">
-        <h1 class="text-xl font-bold mb-4">History Pembayaran SPP</h1>
-
         {{-- Identitas Siswa --}}
         <div class="bg-white shadow rounded p-6 mb-6">
-            <h2 class="text-lg font-semibold mb-4">Data Siswa</h2>
-
+            <h1 class="text-xl font-bold mb-4">Data Siswa</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div>
                     <p class="font-semibold">NISN:</p>

@@ -11,8 +11,8 @@ class SiswaPembayaranController extends Controller
 {
     private function statusPembayaran($nisn) {
         $urutanBulan = [
-            "Januari","Februari","Maret","April","Mei","Juni",
-            "Juli","Agustus","September","Oktober","November","Desember"
+            "Juli","Agustus","September","Oktober","November","Desember",
+            "Januari","Februari","Maret","April","Mei","Juni"
         ];
 
         $bulanSudah = Pembayaran::where('nisn', $nisn)
@@ -91,8 +91,8 @@ class SiswaPembayaranController extends Controller
             ]);
         }
         $urutanBulan = [
-            "Januari","Februari","Maret","April","Mei","Juni",
-            "Juli","Agustus","September","Oktober","November","Desember"
+            "Juli","Agustus","September","Oktober","November","Desember",
+            "Januari","Februari","Maret","April","Mei","Juni"
         ];
 
         $sudah = $pembayaran->pluck('bulan_dibayar')->toArray();
@@ -120,8 +120,8 @@ class SiswaPembayaranController extends Controller
     $pembayaran = Pembayaran::where('nisn', $siswa->nisn)->get();
 
     $urutanBulan = [
-        "Januari","Februari","Maret","April","Mei","Juni",
-        "Juli","Agustus","September","Oktober","November","Desember"
+        "Juli","Agustus","September","Oktober","November","Desember",
+        "Januari","Februari","Maret","April","Mei","Juni"
     ];
 
     $bulanSudah = $pembayaran->pluck('bulan_dibayar')->toArray();
